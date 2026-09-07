@@ -1,4 +1,4 @@
-package model;
+package com.veterinaria.api_veterinaria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "propietario")
+@Table(name = "veterinario")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Propietario {
+public class Veterinario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,14 @@ public class Propietario {
 
     @NotBlank
     @Column(unique = true)
-    private String documento;
+    private String tarjetaProfesional;
 
-    private String telefono;
+    private String especialidad;
 
     @Email
     private String correo;
 
-    // Relación: Un propietario puede tener muchas mascotas
-    @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Mascota> mascotas;
+    // Relación: Un veterinario puede atender varias mascotas
+    @ManyToMany(mappedBy = "veterinarios")
+    private Set<Mascota> mascotas;
 }

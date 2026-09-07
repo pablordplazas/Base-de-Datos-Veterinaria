@@ -1,4 +1,4 @@
-package model;
+package com.veterinaria.api_veterinaria.model;
 
 
 import jakarta.persistence.*;
