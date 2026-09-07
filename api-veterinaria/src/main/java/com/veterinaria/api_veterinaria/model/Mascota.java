@@ -1,5 +1,6 @@
 package com.veterinaria.api_veterinaria.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +18,7 @@ public class Mascota {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY) // Oculta el ID en los formularios de creación (POST)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @NotBlank
@@ -31,12 +32,13 @@ public class Mascota {
     // Relación: Una mascota pertenece a un único propietario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "propietario_id", nullable = false)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY) // Oculta el propietario en el JSON ya que se envía por la URL
+    @JsonIgnore // Evita la recursión infinita al serializar a JSON
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Propietario propietario;
 
     // Relación: Una mascota tiene una única historia clínica
     @OneToOne(mappedBy = "mascota", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY) // Oculta la historia clínica al crear la mascota
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private HistoriaClinica historiaClinica;
 
     // Relación: Una mascota puede ser atendida por varios veterinarios
@@ -46,6 +48,6 @@ public class Mascota {
             joinColumns = @JoinColumn(name = "mascota_id"),
             inverseJoinColumns = @JoinColumn(name = "veterinario_id")
     )
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY) // Oculta los veterinarios en la entrada inicial
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Set<Veterinario> veterinarios;
 }
