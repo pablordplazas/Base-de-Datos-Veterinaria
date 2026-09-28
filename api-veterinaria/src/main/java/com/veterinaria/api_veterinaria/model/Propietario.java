@@ -24,6 +24,8 @@ public class Propietario {
     @NotBlank
     private String nombre;
 
+
+
     @NotBlank
     @Column(unique = true)
     private String documento;
